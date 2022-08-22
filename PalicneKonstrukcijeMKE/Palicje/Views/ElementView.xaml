@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="PalicneKonstrukcijeMKE.Palicje.Views.ElementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:PalicneKonstrukcijeMKE.Converters"
+             xmlns:cc="clr-namespace:PalicneKonstrukcijeMKE.CustomControls"
+             mc:Ignorable="d" MinHeight="420" MinWidth="230" Background="Transparent"
+             d:DesignHeight="480" d:DesignWidth="230" d:Background="GreenYellow">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <Style TargetType="UserControl">
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="cc:DoubleTextBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="8,2"/>
+            <Setter Property="MinWidth" Value="75"/>
+            <Setter Property="Margin" Value="3,0" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="14,4,14,4" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="IsEnabled" Value="{Binding IsSelected, Converter={StaticResource InverseBooleanConverter}}"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Margin="8,0,8,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>                    <!-- main title -->
+            <RowDefinition Height="40"/>                    <!-- node 1 title -->
+            <RowDefinition Height="40"/>                    <!-- node 1 -->
+            <RowDefinition Height="40"/>                    <!-- node 2 title -->
+            <RowDefinition Height="40"/>                    <!-- node 2 -->
+            <RowDefinition Height="40"/>                    <!-- seciton area title -->
+            <RowDefinition Height="40"/>                    <!-- seciton area -->
+            <RowDefinition Height="40"/>                    <!-- young's modulus title -->
+            <RowDefinition Height="40"/>                    <!-- young's modulus -->
+            <RowDefinition Height="*" MinHeight="80"/>      <!-- buttons -->
+        </Grid.RowDefinitions>
+
+
+        <TextBlock Grid.Row="0" Text="Lastnosti palice:" FontSize="28" FontWeight="SemiBold" HorizontalAlignment="Left"/>
+        <!-- Node 1 -->
+        <TextBlock Grid.Row="1" Text="Členek 1:" FontSize="22" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+        <ComboBox Grid.Row="2" ItemsSource="{Binding NodeList}" SelectedValue="{Binding FirstNode}" DisplayMemberPath="Name">
+            <!--
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="IsEnabled" Value="{Binding IsSelected, Converter={StaticResource InverseBooleanConverter}}"/>
+                </Style>
+            </ComboBox.ItemContainerStyle>
+            -->
+        </ComboBox>
+        <!-- Node 2 -->
+        <TextBlock Grid.Row="3" Text="Členek 2:" FontSize="22" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+        <ComboBox Grid.Row="4" ItemsSource="{Binding NodeList}" SelectedValue="{Binding SecondNode}" DisplayMemberPath="Name">
+            <!--
+	        <ComboBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="IsEnabled" Value="{Binding IsSelected, Converter={StaticResource InverseBooleanConverter}}"/>
+                </Style>
+            </ComboBox.ItemContainerStyle>
+	        -->
+        </ComboBox>
+        
+        <!-- seciton area -->
+        <TextBlock Grid.Row="5" Text="Ploščina preseka:" FontSize="22" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+        <Grid Grid.Row="6" Margin="10,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <cc:DoubleTextBox Grid.Column="0" DoubleValue="{Binding SectionArea}"/>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Left" Text="m²"/>
+        </Grid>
+        
+        <!-- young's modulus -->
+        <TextBlock Grid.Row="7" Text="Modul elastičnosti:" FontSize="22" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+        <Grid Grid.Row="8" Margin="10,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <cc:DoubleTextBox Grid.Column="0" DoubleValue="{Binding YoungsModulus}"/>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Left" Text="MPa"/>
+        </Grid>
+        
+        <!-- Buttons -->
+        <Grid Grid.Row="9"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Stretch"
+                Margin="0,0,0,8">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Content="Dodaj palico" Margin="3,0,3,5" Command="{Binding AddElement}" Visibility="{Binding ButtonsVisibility, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Button Grid.Row="1" Content="Odstrani palico" Command="{Binding RemoveElement}"/>
+        </Grid>
+    </Grid>
+</UserControl>

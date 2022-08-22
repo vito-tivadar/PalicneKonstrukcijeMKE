@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="PalicneKonstrukcijeMKE.Palicje.Views.NodeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cc="clr-namespace:PalicneKonstrukcijeMKE.CustomControls"
+             mc:Ignorable="d" MinHeight="540" MinWidth="230" Background="Transparent"
+             d:DesignHeight="490" d:DesignWidth="230" d:Background="GreenYellow">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Style TargetType="UserControl">
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="cc:DoubleTextBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="8,2"/>
+            <Setter Property="MinWidth" Value="75"/>
+            <Setter Property="Margin" Value="3,0" />
+            <Setter Property="Height" Value="27" />
+        </Style>
+        
+    </UserControl.Resources>
+
+    <Grid Margin="8,0,8,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>                <!-- main title -->
+            <RowDefinition Height="40"/>                <!-- coordinates title -->
+            <RowDefinition Height="120"/>               <!-- coordinate inputs -->
+            <RowDefinition Height="40"/>                <!-- forces title -->
+            <RowDefinition Height="120"/>               <!-- force inputs -->
+            <RowDefinition Height="40"/>                <!-- support title -->
+            <RowDefinition Height="30"/>                <!-- support inputs -->
+            <RowDefinition Height="*" MinHeight="80"/>  <!-- buttons -->
+        </Grid.RowDefinitions>
+
+
+        <!-- Node Title -->
+        <TextBlock Grid.Row="0" Text="Lastnosti členka:" FontSize="28" FontWeight="SemiBold" HorizontalAlignment="Left"/>
+        
+        <!-- Node inputs -->
+        <TextBlock Grid.Row="1" Text="Koordinate:" FontSize="22" Margin="10,0,0,0" HorizontalAlignment="Left" ToolTip="{Binding CoordinatesString}"/>
+        <Grid Grid.Row="2" Margin="8,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="35"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Text="X:" />
+            <TextBlock Grid.Row="1" Text="Y:" />
+            <TextBlock Grid.Row="2" Text="Z:" />
+            <cc:DoubleTextBox Grid.Row="0" Grid.Column="1" DoubleValue="{Binding CoordinateX}" DoubleValueAsTooltip="True"/>
+            <cc:DoubleTextBox Grid.Row="1" Grid.Column="1" DoubleValue="{Binding CoordinateY}" DoubleValueAsTooltip="True"/>
+            <cc:DoubleTextBox Grid.Row="2" Grid.Column="1" DoubleValue="{Binding CoordinateZ}" DoubleValueAsTooltip="True"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="mm" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="mm" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="mm" HorizontalAlignment="Left"/>
+        </Grid>
+        <!-- Force inputs -->
+        <TextBlock Grid.Row="3" Text="Sile:" FontSize="22" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+        <Grid Grid.Row="4" Margin="8,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="35"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Text="X:" />
+            <TextBlock Grid.Row="1" Text="Y:" />
+            <TextBlock Grid.Row="2" Text="Z:" />
+            <cc:DoubleTextBox Grid.Row="0" Grid.Column="1" DoubleValue="{Binding ForceX}" DoubleValueAsTooltip="True"/>
+            <cc:DoubleTextBox Grid.Row="1" Grid.Column="1" DoubleValue="{Binding ForceY}" DoubleValueAsTooltip="True"/>
+            <cc:DoubleTextBox Grid.Row="2" Grid.Column="1" DoubleValue="{Binding ForceZ}" DoubleValueAsTooltip="True"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="N" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="N" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="N" HorizontalAlignment="Left"/>
+        </Grid>
+        <!-- Node supports -->
+        <TextBlock Grid.Row="5" Text="Nepomične smeri:" FontSize="22" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+        <Image Source="/Resources/info_icon.png" Grid.Row="3" HorizontalAlignment="Right" Margin="0,10,10,10"/>
+        <Grid Grid.Row="6" Margin="8,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="X:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBlock Grid.Column="2" Text="Y:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBlock Grid.Column="4" Text="Z:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <CheckBox Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,2,0,0" IsChecked="{Binding SupportX}" />
+            <CheckBox Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,2,0,0" IsChecked="{Binding SupportY}" />
+            <CheckBox Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,2,0,0" IsChecked="{Binding SupportZ}" />
+        </Grid>
+        <!-- Buttons -->
+        <Grid Grid.Row="7" 
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Stretch"
+                Margin="0,0,0,8">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Content="Dodaj členek" Margin="3,0,3,5" Command="{Binding AddNodeToCollection}" Visibility="{Binding AddButtonVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="1" Content="Odstrani členek" Command="{Binding RemoveNode}"/>
+        </Grid>
+    </Grid>
+</UserControl>

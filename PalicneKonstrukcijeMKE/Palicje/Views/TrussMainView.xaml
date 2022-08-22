@@ -1,0 +1,150 @@
+﻿<UserControl x:Class="PalicneKonstrukcijeMKE.Palicje.Views.TrussMainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:PalicneKonstrukcijeMKE.Converters"
+             xmlns:ht="http://helix-toolkit.org/wpf"
+             xmlns:trussVM="clr-namespace:PalicneKonstrukcijeMKE.Palicje.ViewModels"
+             xmlns:local="clr-namespace:PalicneKonstrukcijeMKE.Palicje.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             mc:Ignorable="d" Background="Transparent"
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="GreenYellow">
+    <UserControl.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <converters:NullViewModelToWidthConverter x:Key="NullViewModelToWidthConverter"/>
+        <Style TargetType="Button" x:Key="ViewportButton">
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Padding" Value="1" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid IsEnabled="{Binding IsSolverSolving, Converter={StaticResource InverseBooleanConverter}}">
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="230" Width="{Binding CurrentEditControlViewModel, Converter={StaticResource NullViewModelToWidthConverter}}"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- MENU BAR -->
+            <Menu FontSize="14" Background="Transparent"
+                  BorderBrush="Gray" BorderThickness="0,0,0,1"
+                  VerticalAlignment="Top"
+                  Grid.Row="0" Grid.ColumnSpan="2">
+                <MenuItem Header="Datoteka" Padding="10,2" VerticalAlignment="Stretch" >
+                    <MenuItem Header="Novo paličje" Command="{Binding FileNew}"/>
+                    <MenuItem Header="Odpri" Command="{Binding FileOpen}"/>
+                    <MenuItem Header="Shrani" Command="{Binding FileSave}"/>
+                    <MenuItem Header="Shrani kot" Command="{Binding FileSaveAs}"/>
+                    <Separator/>
+                    <MenuItem Header="Izhod" Command="{Binding CloseApp}"/>
+                </MenuItem>
+                <MenuItem Header="Izračun konstrukcije" Padding="10,2" VerticalAlignment="Stretch" Command="{Binding StartSolver}" />
+                <MenuItem Header="O programu" Padding="10,2" VerticalAlignment="Stretch" >
+                    <MenuItem Header="Kako uporabljati program (Github wiki?)"/>
+                    <MenuItem Header="Github" Command="{Binding OpenGitHub}"/>
+                </MenuItem>
+            </Menu>
+
+            
+
+            <Grid Grid.Row="1">
+                <!-- Edit Grid Controls -->
+
+                <Grid.Resources>
+                    <DataTemplate DataType="{x:Type trussVM:NodeViewModel}">
+                        <local:NodeView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type trussVM:ElementViewModel}">
+                        <local:ElementView />
+                    </DataTemplate>
+                </Grid.Resources>
+
+                <ContentControl x:Name="contentControl" Content="{Binding CurrentEditControlViewModel}"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <ht:HelixViewport3D x:Name="viewport3D" ItemsSource="{Binding NodeService.ViewportItems}"
+                                    DefaultCamera="{Binding ViewportCamera}"
+                                    Background="Transparent"
+                                    IsViewCubeEdgeClicksEnabled="True"
+                                    MouseDown="HeilxViewport_MouseDown"
+                                    ShowCoordinateSystem="True"
+                                    Orthographic="True">
+                    <!-- TODO    2D viewport
+                    <ht:CoordinateSystemVisual3D/> // enable / disable
+                        IsRotationEnabled="False"
+                        IsMoveEnabled="False"
+                        ShowViewCube="False"
+                        Orthographic="True"
+                    <uility:NodeVisual3D Forces="0,0,5" Coordinates="0,0,-1"/>
+                    -->
+                </ht:HelixViewport3D>
+                
+                <!--LEFT TOP SIDE-->
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1,1,0,0" Orientation="Horizontal">
+                    <Button Grid.Column="0" Style="{StaticResource ViewportButton}"  Command="{Binding AddNodeControl}"
+                            Width="40" Height="40">
+                        <Image Source="/Resources/add_node.png" />
+                    </Button>
+                    <Button Grid.Column="1" Style="{StaticResource ViewportButton}" Command="{Binding AddElementControl}"
+                            Width="40" Height="40">
+                        <Image Source="/Resources/add_element.png" />
+                    </Button>
+                    <TextBlock Margin="10,0,0,0" Grid.Column="2" Text="{Binding DebugText}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </StackPanel>
+                
+                <!--RIGHT TOP SIDE-->
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Button Style="{StaticResource ViewportButton}"
+                            ToolTip="Nastavitve 3D Pogleda"
+                            Command=""
+                            Visibility="Collapsed">
+                        <!-- TODO
+                        odpri meni za:
+                        omogoči / onemogoči:
+                            - kocko
+                            - rob na kocki
+                            - xyz puščice
+                            - koordinatno izhodišče
+                            - pogled ( naris tloris ...) ne moreš rotirati v tistih pogledih
+                        -->
+                        <Image Source="/Resources/settings_sliders.png"/>
+
+                    </Button >
+                    <Button Style="{StaticResource ViewportButton}"
+                            ToolTip="Prikaži vse elemente"
+                            Visibility="Collapsed"
+                            Click="ButtonFitView">
+                        <Image Source="/Resources/display_all.png" />
+                    </Button>
+                    <Button Style="{StaticResource ViewportButton}"
+                            ToolTip="3D pogled"
+                            Click="ButtonShow3D">
+                        <Image Source="/Resources/box_3D.png" />
+                    </Button>
+                    <Button Style="{StaticResource ViewportButton}"
+                            ToolTip="2D pogled (XY)"
+                            Click="ButtonShow2D">
+                        <Image Source="/Resources/box_side.png" />
+                    </Button>
+                </StackPanel>
+                
+                
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
